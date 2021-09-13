@@ -42,10 +42,9 @@ namespace Isu.Tests
         [Test]
         public void AddStudentToGroup_StudentHasGroupAndGroupContainsStudent()
         {
-            var m3205 = _isuService.FindGroup("m3205");
+            Group m3205 = _isuService.FindGroup("M3205");
             _isuService.AddStudent(m3205, "Sergei Papikyan");
-            Assert.Equals(m3205.FindStudent("Sergei Papikyan").GroupName, m3205.GroupName);
-            Assert.Fail();
+            Assert.AreEqual(m3205.FindStudent("Sergei Papikyan").GroupName, m3205.GroupName);
         }
 
         [Test]
@@ -53,7 +52,7 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                var m3205 = _isuService.FindGroup("m3205");
+                var m3205 = _isuService.FindGroup("M3205");
                 _isuService.AddStudent(m3205, "Sergei Papikyan");
                 _isuService.AddStudent(m3205, "Sergei Papikyan1");
                 _isuService.AddStudent(m3205, "Sergei Papikyan2");
@@ -75,10 +74,12 @@ namespace Isu.Tests
         {
             Assert.Catch<IsuException>(() =>
             {
-                Group m3105 = _isuService.FindGroup("m3105");
+                Group m3105 = _isuService.FindGroup("M3105");
                 Student papikyan =_isuService.AddStudent(m3105, "Papikyan");
-                Group m3204 = _isuService.FindGroup("m3204");
+                Group m3204 = _isuService.FindGroup("M3204");
                 _isuService.ChangeStudentGroup(papikyan, m3204);
+                m3204.PopStudent(papikyan);
+                m3204.PopStudent(papikyan);
                 Assert.Contains(m3105.StudentsList, new[] {papikyan});
                 Assert.Equals(_isuService.FindStudent("Papikyan").GroupName, "m3204");
             });

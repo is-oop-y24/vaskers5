@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Isu.Tools;
 
 namespace Isu.Services
 {
@@ -11,16 +12,21 @@ namespace Isu.Services
         {
             if (groupName[0] != 'M' || groupName[1] != '3')
             {
-                throw new CustomAttributeFormatException("Invalid group name.");
+                throw new InvalidGroupException();
             }
 
             GroupName = groupName;
             StudentsList = students;
         }
 
-        public Group(string groupNumber)
+        public Group(string groupName)
         {
-            GroupName = groupNumber;
+            if (groupName[0] != 'M' || groupName[1] != '3')
+            {
+                throw new InvalidGroupException();
+            }
+
+            GroupName = groupName;
             StudentsList = new List<Student>() { };
         }
 
@@ -40,7 +46,7 @@ namespace Isu.Services
         {
             if (StudentsList.Count == 5)
             {
-                throw new Exception("Reached max size of group");
+                throw new MaxSizeGroupException();
             }
 
             StudentsList.Add(slave);
@@ -49,6 +55,8 @@ namespace Isu.Services
 
         public bool PopStudent(Student slave)
         {
+            if (FindStudent(slave.Id) == null)
+                throw new StudentDontExistException();
             return StudentsList.Remove(slave);
         }
     }

@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Markup;
+using Isu.Tools;
 
 namespace Isu.Services
 {
@@ -57,8 +60,8 @@ namespace Isu.Services
 
          public Student AddStudent(Group @group, string name)
          {
-             int courseNumber = group.GroupName[2];
-             return group.AddStudent(new Student(name, GetId(name), group.GroupName));
+             int courseNumber = @group.GroupName[2];
+             return @group.AddStudent(new Student(name, GetId(name), group.GroupName));
          }
 
          public Student GetStudent(int id)
@@ -99,14 +102,22 @@ namespace Isu.Services
 
          public void ChangeStudentGroup(Student student, Group newGroup)
          {
-             FindGroup(student.GroupName).PopStudent(student);
              student.GroupName = newGroup.GroupName;
              newGroup.AddStudent(student);
          }
 
          private static int GetId(string name)
          {
-             return name.Cast<int>().Sum();
+             int hash = 0;
+             foreach (char elem in name)
+             {
+                 int value = elem;
+                 hash += value;
+             }
+
+             return hash;
+
+             // return name.Cast<int>().Sum();
          }
      }
 }
