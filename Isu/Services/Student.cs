@@ -5,7 +5,7 @@ namespace Isu.Services
 {
     public class Student
     {
-        public Student(string name, int id, string groupName)
+        public Student(int id, string name, string groupName)
         {
             Name = name;
             Id = id;

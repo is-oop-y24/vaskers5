@@ -8,9 +8,24 @@ namespace Isu.Services
 {
     public class Group
     {
+        private const int StudentsPerGroupLimit = 5;
         public Group(string groupName, List<Student> students)
         {
-            if (groupName[0] != 'M' || groupName[1] != '3')
+            if (groupName[0] == 'M' & groupName[1] == '3' & groupName.Length == 5)
+            {
+                for (int i = 2; i < 5; i++)
+                {
+                    try
+                    {
+                        int int32 = Convert.ToInt32(groupName[i]);
+                    }
+                    catch (FormatException)
+                    {
+                        throw new InvalidGroupException();
+                    }
+                }
+            }
+            else
             {
                 throw new InvalidGroupException();
             }
@@ -19,16 +34,9 @@ namespace Isu.Services
             StudentsList = students;
         }
 
+        // fixed
         public Group(string groupName)
-        {
-            if (groupName[0] != 'M' || groupName[1] != '3')
-            {
-                throw new InvalidGroupException();
-            }
-
-            GroupName = groupName;
-            StudentsList = new List<Student>() { };
-        }
+            : this(groupName, new List<Student>() { }) { }
 
         public List<Student> StudentsList { get; set; }
         public string GroupName { get; set; }
@@ -42,9 +50,10 @@ namespace Isu.Services
             return StudentsList.FirstOrDefault(student => student.Id == id);
         }
 
+        // fixed
         public Student AddStudent(Student slave)
         {
-            if (StudentsList.Count == 5)
+            if (StudentsList.Count == StudentsPerGroupLimit)
             {
                 throw new MaxSizeGroupException();
             }

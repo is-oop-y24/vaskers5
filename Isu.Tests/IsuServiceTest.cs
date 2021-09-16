@@ -12,23 +12,23 @@ namespace Isu.Tests
         [SetUp]
         public void Setup()
         {
-            var vasya228 = new Student("vasya228", 311495, "M3104");
-            var petya = new Student("petya228", 311496, "M3104");
+            var vasya228 = new Student( 311495,"vasya228", "M3104");
+            var petya = new Student( 311496,"petya228", "M3104");
             var m3104_students = new List<Student>() { vasya228, petya };
             var m3104 = new Group("M3104", m3104_students);
-            var rofl1 = new Student("rofl1", 311497, "M3105");
-            var rofl2 = new Student("rofl2", 311498, "M3105");
+            var rofl1 = new Student( 311497,"rofl1", "M3105");
+            var rofl2 = new Student( 311498,"rofl2", "M3105");
             var m3105_students = new List<Student>() { rofl1, rofl2 };
             var m3105 = new Group("M3105", m3105_students);
             var groups1 = new List<Group>() { m3104, m3105 };
             var is1 = new Course(1, groups1);
             
-            var vasya2228 = new Student("vasya2228", 312495, "M3204");
-            var petya2 = new Student("petya228", 312496, "M3204");
+            var vasya2228 = new Student( 312495,"vasya2228", "M3204");
+            var petya2 = new Student( 312496,"petya228","M3204");
             var m3204_students = new List<Student>() { vasya2228, petya2 };
             var m3204 = new Group("M3204", m3204_students);
-            var rofl11 = new Student("rofl11", 312497, "M3205");
-            var rofl22 = new Student("rofl22", 312498, "M3205");
+            var rofl11 = new Student( 312497, "rofl11", "M3205");
+            var rofl22 = new Student( 312498, "rofl22", "M3205");
             var m3205_students = new List<Student>() { rofl11, rofl22 };
             var m3205 = new Group("M3205", m3205_students);
             var groups2 = new List<Group>() { m3204, m3205 };

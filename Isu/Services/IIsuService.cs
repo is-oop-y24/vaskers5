@@ -36,8 +36,14 @@ namespace Isu.Services
              return @course;
          }
 
+         // fixed
          public Course AddCourse(int courseNumber)
          {
+             if (Courses.Any(course => course.CourseNumber == courseNumber))
+             {
+                 throw new CourseAlreadyExistException();
+             }
+
              return @AddCourse(new Course(courseNumber));
          }
 
@@ -61,7 +67,7 @@ namespace Isu.Services
          public Student AddStudent(Group @group, string name)
          {
              int courseNumber = @group.GroupName[2];
-             return @group.AddStudent(new Student(name, GetId(name), group.GroupName));
+             return @group.AddStudent(new Student(GetId(name), name, group.GroupName));
          }
 
          public Student GetStudent(int id)
@@ -115,9 +121,9 @@ namespace Isu.Services
                  hash += value;
              }
 
+             var rnd = new Random();
+             hash += rnd.Next(1, 100000);
              return hash;
-
-             // return name.Cast<int>().Sum();
          }
      }
 }

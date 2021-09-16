@@ -44,9 +44,15 @@ namespace Isu.Services
             return @AddGroup(new Group(groupNumber));
         }
 
-        public Student FindStudent(dynamic information)
+        // fixed
+        public Student FindStudent(string name)
         {
-            return Groups.Select(@group => @group.FindStudent(information)).FirstOrDefault(slave => slave != null);
+            return Groups.Select(@group => @group.FindStudent(name)).FirstOrDefault(slave => slave != null);
+        }
+
+        public Student FindStudent(int id)
+        {
+            return Groups.Select(@group => @group.FindStudent(id)).FirstOrDefault(slave => slave != null);
         }
 
         public bool PopStudent(Student slave)
