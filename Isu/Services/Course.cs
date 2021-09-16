@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using Isu.Tools;
 
 namespace Isu.Services
 {
@@ -10,19 +11,24 @@ namespace Isu.Services
     {
         public Course(int courseNumber, List<Group> groups)
         {
+            CheckCourseNumber(courseNumber);
             CourseNumber = courseNumber;
             Groups = groups;
         }
 
         public Course(int courseNumber)
-        {
-            CourseNumber = courseNumber;
-            Groups = new List<Group>() { };
-        }
+            : this(courseNumber, new List<Group> { }) { }
 
         public List<Group> Groups { get; set; }
 
         public int CourseNumber { get; set; }
+
+        public static void CheckCourseNumber(int courseNumber)
+        {
+            if (courseNumber > 5 || courseNumber < 1)
+                throw new InvalidCourseNameException();
+        }
+
         public Group FindGroup(string groupNumber)
         {
             return Groups.FirstOrDefault(@group => @group.GroupName == groupNumber);
@@ -30,6 +36,8 @@ namespace Isu.Services
 
         public Group AddGroup(Group group)
         {
+            if (FindGroup(group.GroupName) != null)
+                throw new GroupAlreadyExistException();
             Groups.Add(group);
             return @group;
         }
@@ -44,7 +52,6 @@ namespace Isu.Services
             return @AddGroup(new Group(groupNumber));
         }
 
-        // fixed
         public Student FindStudent(string name)
         {
             return Groups.Select(@group => @group.FindStudent(name)).FirstOrDefault(slave => slave != null);
@@ -62,11 +69,12 @@ namespace Isu.Services
 
         public Student AddStudent(Student slave)
         {
-            return FindGroup(slave.GroupName).AddStudent(slave);
+            return slave.Group.AddStudent(slave);
         }
 
         public List<Student> FindStudents(string groupName)
         {
+            Group.CheckGroupName(groupName);
             return (from @group in Groups where @group.GroupName == groupName select @group.StudentsList).FirstOrDefault();
         }
     }

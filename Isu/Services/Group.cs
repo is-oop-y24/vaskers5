@@ -11,7 +11,20 @@ namespace Isu.Services
         private const int StudentsPerGroupLimit = 5;
         public Group(string groupName, List<Student> students)
         {
-            if (groupName[0] == 'M' & groupName[1] == '3' & groupName.Length == 5)
+            CheckGroupName(groupName);
+            GroupName = groupName;
+            StudentsList = students;
+        }
+
+        public Group(string groupName)
+            : this(groupName, new List<Student>() { }) { }
+
+        public List<Student> StudentsList { get; }
+        public string GroupName { get; private set; }
+
+        public static void CheckGroupName(string groupName)
+        {
+            if (groupName.Length == 5 && groupName[0] == 'M' && groupName[1] == '3')
             {
                 for (int i = 2; i < 5; i++)
                 {
@@ -29,17 +42,15 @@ namespace Isu.Services
             {
                 throw new InvalidGroupException();
             }
-
-            GroupName = groupName;
-            StudentsList = students;
         }
 
-        // fixed
-        public Group(string groupName)
-            : this(groupName, new List<Student>() { }) { }
+        public Group ChangeGroupName(string newGroupName)
+        {
+            CheckGroupName(newGroupName);
+            GroupName = newGroupName;
+            return this;
+        }
 
-        public List<Student> StudentsList { get; set; }
-        public string GroupName { get; set; }
         public Student FindStudent(string name)
         {
             return StudentsList.FirstOrDefault(student => student.Name == name);
@@ -50,10 +61,9 @@ namespace Isu.Services
             return StudentsList.FirstOrDefault(student => student.Id == id);
         }
 
-        // fixed
         public Student AddStudent(Student slave)
         {
-            if (StudentsList.Count == StudentsPerGroupLimit)
+            if (StudentsList.Count >= StudentsPerGroupLimit)
             {
                 throw new MaxSizeGroupException();
             }

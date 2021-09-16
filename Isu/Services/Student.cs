@@ -5,15 +5,15 @@ namespace Isu.Services
 {
     public class Student
     {
-        public Student(int id, string name, string groupName)
+        public Student(int id, string name, Group group)
         {
             Name = name;
             Id = id;
-            GroupName = groupName;
+            Group = group;
         }
 
         public string Name { get; set; }
         public int Id { get; set; }
-        public string GroupName { get; set; }
+        public Group Group { get; set; }
     }
 }
