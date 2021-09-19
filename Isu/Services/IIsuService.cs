@@ -12,5 +12,6 @@ namespace Isu.Services
         List<Student> FindStudents(int courseNumber);
         Group FindGroup(string groupName);
         List<Group> FindGroups(int courseNumber);
+        void ChangeStudentGroup(Student student, Group newGroup);
     }
 }
