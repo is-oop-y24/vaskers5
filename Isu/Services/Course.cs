@@ -19,9 +19,9 @@ namespace Isu.Services
         public Course(int courseNumber)
             : this(courseNumber, new List<Group> { }) { }
 
-        public List<Group> Groups { get; set; }
+        public List<Group> Groups { get; }
 
-        public int CourseNumber { get; set; }
+        public int CourseNumber { get; }
 
         public static void CheckCourseNumber(int courseNumber)
         {

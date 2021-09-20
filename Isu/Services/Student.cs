@@ -12,8 +12,8 @@ namespace Isu.Services
             Group = group;
         }
 
-        public string Name { get; set; }
-        public int Id { get; private set; }
+        public string Name { get; }
+        public int Id { get; }
         public Group Group { get; set; }
     }
 }
