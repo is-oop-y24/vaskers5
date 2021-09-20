@@ -13,7 +13,7 @@ namespace Isu.Services
         }
 
         public string Name { get; set; }
-        public int Id { get; set; }
+        public int Id { get; private set; }
         public Group Group { get; set; }
     }
 }
