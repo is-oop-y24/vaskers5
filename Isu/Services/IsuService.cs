@@ -14,7 +14,7 @@ namespace Isu.Services
              Courses = courses;
          }
 
-         public List<Course> Courses { get; }
+         private List<Course> Courses { get; }
          public Course AddCourse(Course course)
          {
              if (Courses.Any(elem => elem.CourseNumber == course.CourseNumber))
