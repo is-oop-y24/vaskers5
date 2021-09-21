@@ -54,17 +54,17 @@ namespace Isu.Services
 
         public Student FindStudent(string name)
         {
-            return Groups.Select(@group => @group.FindStudent(name)).FirstOrDefault(slave => slave != null);
+            return Groups.FirstOrDefault(@group => @group.FindStudent(name) != null)?.FindStudent(name);
         }
 
         public Student FindStudent(int id)
         {
-            return Groups.Select(@group => @group.FindStudent(id)).FirstOrDefault(slave => slave != null);
+            return Groups.FirstOrDefault(@group => @group.FindStudent(id) != null)?.FindStudent(id);
         }
 
         public bool PopStudent(Student slave)
         {
-            return Groups.Select(@group => @group.PopStudent(slave)).Any(result => result);
+            return Groups.FirstOrDefault(@group => @group.PopStudent(slave) == true) != null;
         }
 
         public Student AddStudent(Student slave)
@@ -75,7 +75,7 @@ namespace Isu.Services
         public List<Student> FindStudents(string groupName)
         {
             Group.CheckGroupName(groupName);
-            return (from @group in Groups where @group.GroupName == groupName select @group.StudentsList).FirstOrDefault();
+            return (from @group in Groups where @group.GroupName == groupName select @group.StudentsList).FirstOrDefault()?.ToList();
         }
     }
 }

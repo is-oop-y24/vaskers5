@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Reflection;
 using Isu.Tools;
@@ -13,14 +14,16 @@ namespace Isu.Services
         {
             CheckGroupName(groupName);
             GroupName = groupName;
-            StudentsList = students;
+            Students = students;
+            StudentsList = students.AsReadOnly();
         }
 
         public Group(string groupName)
             : this(groupName, new List<Student>() { }) { }
-
-        public List<Student> StudentsList { get; }
         public string GroupName { get; private set; }
+
+        public IList<Student> StudentsList { get; }
+        private List<Student> Students { get; }
 
         public static void CheckGroupName(string groupName)
         {
@@ -53,22 +56,22 @@ namespace Isu.Services
 
         public Student FindStudent(string name)
         {
-            return StudentsList.FirstOrDefault(student => student.Name == name);
+            return Students.FirstOrDefault(student => student.Name == name);
         }
 
         public Student FindStudent(int id)
         {
-            return StudentsList.FirstOrDefault(student => student.Id == id);
+            return Students.FirstOrDefault(student => student.Id == id);
         }
 
         public Student AddStudent(Student slave)
         {
-            if (StudentsList.Count >= StudentsPerGroupLimit)
+            if (Students.Count >= StudentsPerGroupLimit)
             {
                 throw new MaxSizeGroupException();
             }
 
-            StudentsList.Add(slave);
+            Students.Add(slave);
             return @slave;
         }
 
@@ -76,7 +79,7 @@ namespace Isu.Services
         {
             if (FindStudent(slave.Id) == null)
                 throw new StudentDontExistException();
-            return StudentsList.Remove(slave);
+            return Students.Remove(slave);
         }
     }
 }

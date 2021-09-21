@@ -57,7 +57,7 @@ namespace Isu.Services
 
          public Student GetStudent(int id)
          {
-             Student student = Courses.Select(course => course.FindStudent(id)).FirstOrDefault(student => student != null);
+             Student student = Courses.FirstOrDefault(course => course.FindStudent(id) != null)?.FindStudent(id);
              if (student == null)
                  throw new StudentDontExistException();
              return student;
@@ -65,12 +65,12 @@ namespace Isu.Services
 
          public Student FindStudent(string name)
          {
-             return Courses.Select(course => course.FindStudent(name)).FirstOrDefault(student => student != null);
+             return Courses.FirstOrDefault(course => course.FindStudent(name) != null)?.FindStudent(name);
          }
 
          public List<Student> FindStudents(string groupName)
          {
-             return Courses.Select(course => course.FindStudents(groupName)).FirstOrDefault(group => group != null);
+             return Courses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName).StudentsList.ToList();
          }
 
          public List<Student> FindStudents(int courseNumber)
@@ -85,7 +85,7 @@ namespace Isu.Services
          public Group FindGroup(string groupName)
          {
              Group.CheckGroupName(groupName);
-             return Courses.Select(course => course.FindGroup(groupName)).FirstOrDefault(group => group != null);
+             return Courses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName);
          }
 
          public List<Group> FindGroups(int courseNumber)
@@ -96,9 +96,7 @@ namespace Isu.Services
 
          public void ChangeStudentGroup(Student student, Group newGroup)
          {
-             student.Group.PopStudent(student);
-             student.Group = newGroup;
-             newGroup.AddStudent(student);
+             student.ChangeStudentGroup(newGroup);
          }
      }
 }

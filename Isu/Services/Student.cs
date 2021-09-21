@@ -14,6 +14,13 @@ namespace Isu.Services
 
         public string Name { get; }
         public int Id { get; }
-        public Group Group { get; set; }
+        public Group Group { get; private set; }
+
+        public void ChangeStudentGroup(Group newGroup)
+        {
+            Group.PopStudent(this);
+            Group = newGroup;
+            newGroup.AddStudent(this);
+        }
     }
 }
