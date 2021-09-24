@@ -9,20 +9,22 @@ namespace Isu.Services
      public class IsuService : IIsuService
      {
          private int _lastStudentId = 311490;
-         public IsuService(List<Course> courses)
+         public IsuService(List<Course> isuCourses)
          {
-             Courses = courses;
+             IsuCourses = isuCourses;
+             Courses = IsuCourses.AsReadOnly();
          }
 
-         private List<Course> Courses { get; }
+         public IList<Course> Courses { get; }
+         private List<Course> IsuCourses { get; }
          public Course AddCourse(Course course)
          {
-             if (Courses.Any(elem => elem.CourseNumber == course.CourseNumber))
+             if (IsuCourses.Any(elem => elem.CourseNumber == course.CourseNumber))
              {
                  throw new CourseAlreadyExistException();
              }
 
-             Courses.Add(course);
+             IsuCourses.Add(course);
              return course;
          }
 
@@ -38,7 +40,7 @@ namespace Isu.Services
 
          public Course FindCourse(int courseNumber)
          {
-             return Courses.FirstOrDefault(course => course.CourseNumber == courseNumber);
+             return IsuCourses.FirstOrDefault(course => course.CourseNumber == courseNumber);
          }
 
          public Group AddGroup(string name)
@@ -57,7 +59,7 @@ namespace Isu.Services
 
          public Student GetStudent(int id)
          {
-             Student student = Courses.FirstOrDefault(course => course.FindStudent(id) != null)?.FindStudent(id);
+             Student student = IsuCourses.FirstOrDefault(course => course.FindStudent(id) != null)?.FindStudent(id);
              if (student == null)
                  throw new StudentDontExistException();
              return student;
@@ -65,18 +67,18 @@ namespace Isu.Services
 
          public Student FindStudent(string name)
          {
-             return Courses.FirstOrDefault(course => course.FindStudent(name) != null)?.FindStudent(name);
+             return IsuCourses.FirstOrDefault(course => course.FindStudent(name) != null)?.FindStudent(name);
          }
 
          public List<Student> FindStudents(string groupName)
          {
-             return Courses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName).StudentsList.ToList();
+             return IsuCourses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName).StudentsList.ToList();
          }
 
          public List<Student> FindStudents(int courseNumber)
          {
              Course.CheckCourseNumber(courseNumber);
-             Course course = Courses.Find(course => course.CourseNumber == courseNumber);
+             Course course = IsuCourses.Find(course => course.CourseNumber == courseNumber);
              if (course == null)
                  throw new CourseDontExistException();
              return course.Groups.SelectMany(gr => gr.StudentsList).ToList();
@@ -85,13 +87,13 @@ namespace Isu.Services
          public Group FindGroup(string groupName)
          {
              Group.CheckGroupName(groupName);
-             return Courses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName);
+             return IsuCourses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName);
          }
 
          public List<Group> FindGroups(int courseNumber)
          {
              Course.CheckCourseNumber(courseNumber);
-             return FindCourse(courseNumber).Groups;
+             return FindCourse(courseNumber).Groups.ToList();
          }
 
          public void ChangeStudentGroup(Student student, Group newGroup)

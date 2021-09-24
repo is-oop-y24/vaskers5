@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
@@ -9,19 +10,20 @@ namespace Isu.Services
 {
     public class Course
     {
-        public Course(int courseNumber, List<Group> groups)
+        public Course(int courseNumber, List<Group> сourseGroups)
         {
             CheckCourseNumber(courseNumber);
             CourseNumber = courseNumber;
-            Groups = groups;
+            CourseGroups = сourseGroups;
+            Groups = CourseGroups.AsReadOnly();
         }
 
         public Course(int courseNumber)
             : this(courseNumber, new List<Group> { }) { }
-
-        public List<Group> Groups { get; }
-
         public int CourseNumber { get; }
+
+        public IList<Group> Groups { get; }
+        private List<Group> CourseGroups { get; }
 
         public static void CheckCourseNumber(int courseNumber)
         {
@@ -31,14 +33,14 @@ namespace Isu.Services
 
         public Group FindGroup(string groupNumber)
         {
-            return Groups.FirstOrDefault(@group => @group.GroupName == groupNumber);
+            return CourseGroups.FirstOrDefault(@group => @group.GroupName == groupNumber);
         }
 
         public Group AddGroup(Group group)
         {
             if (FindGroup(group.GroupName) != null)
                 throw new GroupAlreadyExistException();
-            Groups.Add(group);
+            CourseGroups.Add(group);
             return @group;
         }
 
@@ -54,17 +56,17 @@ namespace Isu.Services
 
         public Student FindStudent(string name)
         {
-            return Groups.FirstOrDefault(@group => @group.FindStudent(name) != null)?.FindStudent(name);
+            return CourseGroups.FirstOrDefault(@group => @group.FindStudent(name) != null)?.FindStudent(name);
         }
 
         public Student FindStudent(int id)
         {
-            return Groups.FirstOrDefault(@group => @group.FindStudent(id) != null)?.FindStudent(id);
+            return CourseGroups.FirstOrDefault(@group => @group.FindStudent(id) != null)?.FindStudent(id);
         }
 
         public bool PopStudent(Student slave)
         {
-            return Groups.FirstOrDefault(@group => @group.PopStudent(slave) == true) != null;
+            return CourseGroups.FirstOrDefault(@group => @group.PopStudent(slave) == true) != null;
         }
 
         public Student AddStudent(Student slave)
@@ -75,7 +77,7 @@ namespace Isu.Services
         public List<Student> FindStudents(string groupName)
         {
             Group.CheckGroupName(groupName);
-            return (from @group in Groups where @group.GroupName == groupName select @group.StudentsList).FirstOrDefault()?.ToList();
+            return (from @group in CourseGroups where @group.GroupName == groupName select @group.StudentsList).FirstOrDefault()?.ToList();
         }
     }
 }
