@@ -80,10 +80,7 @@ namespace Isu.Tests
                 Student papikyan =_isuService.AddStudent(m3105, "Papikyan");
                 Group m3204 = _isuService.FindGroup("M3204");
                 _isuService.ChangeStudentGroup(papikyan, m3204);
-                m3204.PopStudent(papikyan);
-                m3204.PopStudent(papikyan);
-                Assert.Contains(m3105.StudentsList, new[] {papikyan});
-                Assert.Equals(_isuService.FindStudent("Papikyan").Group, "m3204");
+                m3105.PopStudent(papikyan);
             });
         }
     }
