@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Shops.Entities;
 using Shops.Tools;
 
 namespace Shops.Services
@@ -16,7 +17,7 @@ namespace Shops.Services
             ShopList = new List<Shop>() { };
         }
 
-        public Dictionary<int, string> Products { private get; set; }
+        private Dictionary<int, string> Products { get; }
         private List<Shop> ShopList { get; }
 
         public void AddProduct(string productName)

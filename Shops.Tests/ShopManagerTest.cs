@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
+using Shops.Entities;
 using Shops.Services;
 using Shops.Tools;
 
@@ -25,7 +26,7 @@ namespace Shops.Tests
         }
 
         [Test]
-        public void JustSaleTest()
+        public void Sale_ToPerson_WithMoney()
         {
             var buyerWithMoney = new Person("Илья", 39999);
             float moneyBefore = buyerWithMoney.Money;
@@ -37,7 +38,7 @@ namespace Shops.Tests
         }
 
         [Test]
-        public void SaleToPersonWithoutMonetTest()
+        public void Sale_ToPerson_WithoutMoney_Exception()
         {
             ShopsException shopsException = Assert.Catch<ShopsException>(() =>
             {
@@ -48,7 +49,7 @@ namespace Shops.Tests
         }
         
         [Test]
-        public void FindNotExistItem()
+        public void Find_NotExistItem_Exception()
         {
             ShopsException shopsException = Assert.Catch<ShopsException>(() =>
             {
@@ -58,7 +59,7 @@ namespace Shops.Tests
         }
         
         [Test]
-        public void SaleToMuchItem()
+        public void Sale_ToMuchItem_Exception()
         {
             ShopsException shopsException = Assert.Catch<ShopsException>(() =>
             {
@@ -69,7 +70,7 @@ namespace Shops.Tests
         }
         
         [Test]
-        public void SaleDontExistItemInShop()
+        public void Sale_DontExistItemInShop_Exception()
         {
             ShopsException shopsException = Assert.Catch<ShopsException>(() =>
             {
@@ -80,7 +81,7 @@ namespace Shops.Tests
         }
         
         [Test]
-        public void DeliveryNotExistItem()
+        public void Delivery_NotExistItem_Check()
         {
             var shop = _shopManager.AddShop("Пятерочка", "Заречная 18");
             _shopManager.AddItemsToShop(shop, "Не существующий предмет", 7, 1);
