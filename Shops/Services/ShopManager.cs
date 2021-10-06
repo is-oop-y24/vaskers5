@@ -10,37 +10,42 @@ namespace Shops.Services
 {
     public class ShopManager
     {
-        private int _lastId = 0;
+        private int _lastShopId = 0;
+        private int _lastProductId = 0;
         public ShopManager()
         {
-            Products = new Dictionary<int, string>() { };
+            Products = new Dictionary<int, Product>() { };
             ShopList = new List<Shop>() { };
         }
 
-        private Dictionary<int, string> Products { get; }
+        private Dictionary<int, Product> Products { get; }
         private List<Shop> ShopList { get; }
 
         public void AddProduct(string productName)
         {
-            Products.Add(Hash(productName), productName);
+            if (Products.ContainsKey(Hash(productName)))
+                throw new ProductAlreadyExistException($"{productName} is exist");
+
+            var product = new Product(_lastProductId++, productName);
+            Products.Add(Hash(product), new Product(_lastProductId++, productName));
         }
 
         public void AddProduct(List<string> productNames)
         {
             foreach (string productName in productNames)
             {
-                Products.Add(Hash(productName), productName);
+                AddProduct(productName);
             }
         }
 
         public bool ProductExist(string productName)
         {
-            return Products.ContainsValue(productName);
+            return Products.ContainsKey(Hash(productName));
         }
 
         public Shop AddShop(string shopName, string place)
         {
-            var shop = new Shop(_lastId++, shopName, place);
+            var shop = new Shop(_lastShopId++, shopName, place);
             ShopList.Add(shop);
             return shop;
         }
@@ -74,7 +79,7 @@ namespace Shops.Services
         public List<Shop> FindShopsWithItem(string itemName, int number)
         {
             if (!ProductExist(itemName))
-                throw new ItemDontExistException();
+                throw new ItemDontExistException($"{itemName} is not found!");
             var shopsWithItem = ShopList.Where(shops => shops.FindItem(itemName) != null).ToList();
             return shopsWithItem.OrderBy(shop => shop.FindItem(itemName).Price).ToList();
         }
@@ -84,9 +89,14 @@ namespace Shops.Services
             return FindShopsWithItem(itemName, number)[0];
         }
 
-        internal static int Hash(string name)
+        private static int Hash(string productName)
         {
-            return name.GetHashCode();
+            return productName.GetHashCode();
+        }
+
+        private static int Hash(Product product)
+        {
+            return Hash(product.Name);
         }
 
         private Item CreateItem(string itemName, int price, int number)
