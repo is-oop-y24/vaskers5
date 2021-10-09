@@ -12,7 +12,7 @@ namespace Shops.Services
             Id = id;
             Name = name;
             Place = place;
-            Items = new Dictionary<int, Item>() { };
+            Items = new Dictionary<string, Item>() { };
         }
 
         public string Name { get; }
@@ -20,11 +20,11 @@ namespace Shops.Services
         public string Place { get; }
 
         public int Id { get; }
-        public Dictionary<int, Item> Items { get; private set; }
+        public Dictionary<string, Item> Items { get; private set; }
 
         public Item Delivery(Item item)
         {
-            int hash = item.GetHashCode();
+            string hash = item.SystemProduct.Name;
             if (!Items.ContainsKey(hash))
             {
                 Items.Add(hash, item);
@@ -65,7 +65,7 @@ namespace Shops.Services
 
         public Item FindItem(string itemName)
         {
-            return Items.ContainsKey(itemName.GetHashCode()) ? Items[itemName.GetHashCode()] : null;
+            return Items.ContainsKey(itemName) ? Items[itemName] : null;
         }
 
         public void ChangePrice(string itemName, float newPrice)

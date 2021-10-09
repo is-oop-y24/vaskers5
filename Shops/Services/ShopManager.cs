@@ -14,20 +14,20 @@ namespace Shops.Services
         private int _lastProductId = 0;
         public ShopManager()
         {
-            Products = new Dictionary<int, Product>() { };
+            Products = new Dictionary<string, Product>() { };
             ShopList = new List<Shop>() { };
         }
 
-        private Dictionary<int, Product> Products { get; }
+        private Dictionary<string, Product> Products { get; }
         private List<Shop> ShopList { get; }
 
         public Product AddProduct(string productName)
         {
-            if (Products.ContainsKey(productName.GetHashCode()))
+            if (Products.ContainsKey(productName))
                 throw new ProductAlreadyExistException($"{productName} is exist");
 
             var product = new Product(_lastProductId++, productName);
-            Products.Add(product.GetHashCode(), product);
+            Products.Add(product.Name, product);
             return product;
         }
 
@@ -66,7 +66,7 @@ namespace Shops.Services
 
         public List<Shop> FindShopsWithItem(string itemName, int number)
         {
-            if (!Products.ContainsKey(itemName.GetHashCode()))
+            if (!Products.ContainsKey(itemName))
                 throw new ItemDontExistException($"{itemName} is not found!");
             var shopsWithItem = ShopList.Where(shops => shops.FindItem(itemName) != null).ToList();
             return shopsWithItem.OrderBy(shop => shop.FindItem(itemName).Price).ToList();
@@ -79,9 +79,9 @@ namespace Shops.Services
 
         public Item CreateItem(string itemName, int price, int number)
         {
-            if (!Products.ContainsKey(itemName.GetHashCode()))
+            if (!Products.ContainsKey(itemName))
                 throw new ItemDontExistException($"{itemName} is not exist");
-            Product product = Products[itemName.GetHashCode()];
+            Product product = Products[itemName];
             return new Item(product, price, number);
         }
     }
