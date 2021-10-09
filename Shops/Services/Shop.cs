@@ -24,7 +24,7 @@ namespace Shops.Services
 
         public Item Delivery(Item item)
         {
-            int hash = Hash(item);
+            int hash = item.GetHashCode();
             if (!Items.ContainsKey(hash))
             {
                 Items.Add(hash, item);
@@ -42,11 +42,14 @@ namespace Shops.Services
             Item item = FindItem(itemName);
 
             if (item == null)
-                throw new ShopDontContainsItemException();
-            else if (item.Price * number > person.Money)
-                throw new NotEnoughMoneyException();
-            else if (item.Number < number)
-                throw new ShopDontContainsItemException();
+                throw new ShopDontContainsItemException($"{itemName} is not found");
+            if (item.Price * number > person.Money)
+                throw new NotEnoughMoneyException($"Price is {item.Price * number}, your money is {person.Money}");
+            if (item.Number < number)
+            {
+                throw new ShopDontContainsItemException($"Shop does not contains so much of {itemName}," +
+                                                        $" current number is {item.Number}");
+            }
 
             item.Number -= number;
             person.Money -= number * item.Price;
@@ -62,27 +65,15 @@ namespace Shops.Services
 
         public Item FindItem(string itemName)
         {
-            return Items.ContainsKey(Hash(itemName)) ? Items[Hash(itemName)] : null;
+            return Items.ContainsKey(itemName.GetHashCode()) ? Items[itemName.GetHashCode()] : null;
         }
 
         public void ChangePrice(string itemName, float newPrice)
         {
             Item item = FindItem(itemName);
             if (item != null)
-                throw new ShopDontContainsItemException();
-            if (newPrice < 0)
-                throw new ShopsException("Price cannot be < 0");
+                throw new ShopDontContainsItemException($"{itemName} is not found,");
             FindItem(itemName).Price = newPrice;
-        }
-
-        private int Hash(string item)
-        {
-            return item.GetHashCode();
-        }
-
-        private int Hash(Item item)
-        {
-            return item.Name.GetHashCode();
         }
     }
 }

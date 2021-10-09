@@ -10,5 +10,9 @@ namespace Shops.Entities
 
         public int Id { get; }
         public string Name { get; }
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
+        }
     }
 }

@@ -3,19 +3,42 @@ namespace Shops.Entities
 {
     public class Item
     {
-        public Item(string name, float price, int number)
+        private float _price;
+        private int _number;
+        public Item(Product systemProduct, float price, int number)
         {
-            if (price < 0)
-                throw new ShopsException("Price of item cannot be < 0");
-            if (number < 0)
-                throw new ShopsException("Number of item cannot be < 0");
-            Name = name;
+            SystemProduct = systemProduct;
             Price = price;
             Number = number;
         }
 
-        public string Name { get; }
-        public float Price { get; set; }
-        public int Number { get; set; }
+        public Product SystemProduct { get; }
+
+        public float Price
+        {
+            get => _price;
+            set
+            {
+                if (value < 0)
+                    throw new ShopsException("Price of item cannot be < 0");
+                _price = value;
+            }
+        }
+
+        public int Number
+        {
+            get => _number;
+            set
+            {
+                if (value < 0)
+                    throw new ShopsException("Number of item cannot be < 0");
+                _number = value;
+            }
+        }
+
+        public override int GetHashCode()
+        {
+            return SystemProduct.GetHashCode();
+        }
     }
 }

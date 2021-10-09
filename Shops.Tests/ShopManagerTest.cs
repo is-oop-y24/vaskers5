@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Shops.Entities;
 using Shops.Services;
@@ -16,12 +17,16 @@ namespace Shops.Tests
             var shopManager = new ShopManager();
             Shop magnitShop = shopManager.AddShop("Магнит", "Заречная 17");
             var itemsNames = new List<string>() {"Гречка", "Сахар", "Котлетки", "Нагетсы"};
-            shopManager.AddProduct(itemsNames);
-            List<Item> items = shopManager.AddItemsToShop(magnitShop, itemsNames,
-                new List<int>() {39, 40, 59, 60}, new List<int>() {10, 20, 30, 40});
-            
+            var itemNumbers = new List<int>() {39, 40, 59, 60};
+            var itemPrices = new List<int>() {10, 20, 30, 40};
+            List<Product> products = shopManager.AddProduct(itemsNames);
+            var items = new List<Item>(){};
+            var lens = new List<int> {products.Count, itemsNames.Count, itemNumbers.Count, itemPrices.Count};
+            for (int i = 0; i < lens.Min(); i++)
+                items.Add(shopManager.CreateItem(itemsNames[i], itemNumbers[i], itemPrices[i]));
             Shop lentaShop = shopManager.AddShop("Лента", "Улица Михалиа Дудина 8");
             shopManager.AddItemsToShop(lentaShop, items);
+            shopManager.AddItemsToShop(magnitShop, items);
             _shopManager = shopManager;
         }
 
@@ -30,11 +35,11 @@ namespace Shops.Tests
         {
             var buyerWithMoney = new Person("Илья", 39999);
             float moneyBefore = buyerWithMoney.Money;
-            var shop = _shopManager.FindCheapestShop("Гречка", 8);
-            int numberOfItemBefore = shop.FindItem("Гречка").Number;
-            shop.Sell("Гречка", 8, buyerWithMoney);
+            var shop = _shopManager.FindCheapestShop("Сахар", 8);
+            int numberOfItemBefore = shop.FindItem("Сахар").Number;
+            shop.Sell("Сахар", 8, buyerWithMoney);
             Assert.IsTrue(buyerWithMoney.Money < moneyBefore);
-            Assert.AreEqual(numberOfItemBefore, shop.FindItem("Гречка").Number + 8);
+            Assert.AreEqual(numberOfItemBefore, shop.FindItem("Сахар").Number + 8);
         }
 
         [Test]
@@ -79,17 +84,6 @@ namespace Shops.Tests
                 shop.Sell("Пирожок с картошкой", 1, buyer);
             } );
         }
-        
-        [Test]
-        public void Delivery_NotExistItem_Check()
-        {
-            var shop = _shopManager.AddShop("Пятерочка", "Заречная 18");
-            _shopManager.AddItemsToShop(shop, "Не существующий предмет", 7, 1);
-            Assert.IsTrue(!_shopManager.ProductExist("Не существующий предмет"));
-            shop.FindItem("Не существующий предмет", 0);
-            Assert.AreEqual(shop.FindItem("Не существующий предмет",0), null);
-        }
-        
     }
         
         
