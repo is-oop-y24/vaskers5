@@ -45,7 +45,6 @@ namespace Isu.Services
 
          public Group AddGroup(string name)
          {
-             Group.CheckGroupName(name);
              int courseNumber = name[2];
              Course.CheckCourseNumber(courseNumber);
              Course course = FindCourse(courseNumber);
@@ -86,7 +85,6 @@ namespace Isu.Services
 
          public Group FindGroup(string groupName)
          {
-             Group.CheckGroupName(groupName);
              return IsuCourses.FirstOrDefault(course => course.FindGroup(groupName) != null)?.FindGroup(groupName);
          }
 

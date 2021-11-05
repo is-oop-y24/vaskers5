@@ -12,15 +12,15 @@ namespace IsuExtra.Services
             : base(courses)
         {
             EducationCourses = educationCourses;
-            GroupsTimeTable = new Dictionary<Group, List<Lesson>>() { };
-            StudentsTimeTable = new Dictionary<Student, List<Lesson>>() { };
+            GroupsTimeTable = new List<GroupWithTimeTable>() { };
+            StudentsTimeTable = new List<StudentWithTimeTable>() { };
         }
 
         public List<EducationCourse> EducationCourses { get; set; }
 
-        private Dictionary<Group, List<Lesson>> GroupsTimeTable { get; set; }
+        private List<GroupWithTimeTable> GroupsTimeTable { get; set; }
 
-        private Dictionary<Student, List<Lesson>> StudentsTimeTable { get; set; }
+        private List<StudentWithTimeTable> StudentsTimeTable { get; set; }
 
         public void AddNewEducationCourse(EducationCourse eduCourse)
         {
@@ -40,26 +40,51 @@ namespace IsuExtra.Services
                     "You are trying to enroll in a course that belongs to your mega-faculty");
             }
 
+            int systemStudentIndex = GetIndexOfStudent(student);
             foreach (Lesson lesson in streams[0].TimeTable)
             {
-                StudentsTimeTable[student].Add(lesson);
+                StudentsTimeTable[systemStudentIndex].Timetable.Add(lesson);
             }
         }
 
         public void UnsubscribeStudentFromCourse(Student student, EducationCourse course)
         {
-            StudentsTimeTable[student] = StudentsTimeTable[student].Where(lesson => lesson.LessonFaculty == course.Faculty).ToList();
+            int systemStudentIndex = GetIndexOfStudent(student);
+            var newStudentTimeTable = StudentsTimeTable[systemStudentIndex].Timetable.Where(lesson => lesson.LessonFaculty != course.Faculty).ToList();
+            StudentsTimeTable[systemStudentIndex].Timetable = newStudentTimeTable;
         }
 
         private List<Stream> CheckGroupTimeTable(Group group, EducationCourse course)
         {
-            var streams = course.Streams.Where(stream => stream.IntersectTimeTables(GroupsTimeTable[@group])).ToList();
+            var streams = course.GetStreams().Where(stream => stream.IntersectTimeTables(GroupsTimeTable[GetIndexOfGroup(group)].Timetable)).ToList();
             return streams;
         }
 
         private bool CheckCourseFaculty(Group group, MegaFaculty faculty)
         {
             return faculty.FacultySymbol != group.GroupName;
+        }
+
+        private int GetIndexOfStudent(Student sampleStudent)
+        {
+            for (int index = 0; index < StudentsTimeTable.Count; index++)
+            {
+                if (StudentsTimeTable[index].OgnpStudent == sampleStudent)
+                    return index;
+            }
+
+            return -1;
+        }
+
+        private int GetIndexOfGroup(Group sampleGroup)
+        {
+            for (int index = 0; index < StudentsTimeTable.Count; index++)
+            {
+                if (GroupsTimeTable[index].StudyGroup == sampleGroup)
+                    return index;
+            }
+
+            return -1;
         }
     }
 }

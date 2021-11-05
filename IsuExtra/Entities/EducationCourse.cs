@@ -12,7 +12,11 @@ namespace IsuExtra.Entities
         }
 
         public string EducationCourseName { get; set; }
-        public List<Stream> Streams { get; set; }
         public MegaFaculty Faculty { get; set; }
+        private List<Stream> Streams { get; set; }
+        public List<Stream> GetStreams()
+        {
+            return Streams;
+        }
     }
 }

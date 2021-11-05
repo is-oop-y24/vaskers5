@@ -76,7 +76,6 @@ namespace Isu.Services
 
         public List<Student> FindStudents(string groupName)
         {
-            Group.CheckGroupName(groupName);
             return (from @group in CourseGroups where @group.GroupName == groupName select @group.StudentsList).FirstOrDefault()?.ToList();
         }
     }
