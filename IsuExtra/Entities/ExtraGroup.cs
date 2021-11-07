@@ -7,15 +7,13 @@ namespace IsuExtra.Entities
 {
     public class ExtraGroup : Group
     {
-        public ExtraGroup(string groupName, List<Student> students)
+        public ExtraGroup(string groupName, List<Student> students, List<Lesson> timeTable)
             : base(groupName, students)
         {
+            TimeTable = timeTable;
         }
 
-        public ExtraGroup(string groupName)
-            : base(groupName)
-        {
-        }
+        public List<Lesson> TimeTable { get; set; }
 
         public override void CheckGroupName(string groupName)
         {
