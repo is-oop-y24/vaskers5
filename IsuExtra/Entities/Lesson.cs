@@ -8,12 +8,11 @@ namespace IsuExtra.Entities
     {
         private int _dayNumber;
         private int _lessonNumber;
-        private Lesson(string lessonName, int dayNumber, int lessonNumber, Group lessonGroup, Teacher teacher, Audition audition, MegaFaculty lessonFaculty)
+        public Lesson(string lessonName, int dayNumber, int lessonNumber, Teacher teacher, Audition audition, MegaFaculty lessonFaculty)
         {
             LessonName = lessonName;
             DayNumber = dayNumber;
             LessonNumber = lessonNumber;
-            LessonGroup = lessonGroup;
             LessonTeacher = teacher;
             LessonAudition = audition;
             LessonFaculty = lessonFaculty;
@@ -42,7 +41,6 @@ namespace IsuExtra.Entities
             }
         }
 
-        public Group LessonGroup { get; set; }
         public Teacher LessonTeacher { get; set; }
         public Audition LessonAudition { get; set; }
         public object LessonFaculty { get; set; }
