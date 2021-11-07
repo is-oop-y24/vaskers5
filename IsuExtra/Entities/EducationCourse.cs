@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace IsuExtra.Entities
 {
@@ -14,6 +15,18 @@ namespace IsuExtra.Entities
         public string EducationCourseName { get; set; }
         public MegaFaculty Faculty { get; set; }
         private List<Stream> Streams { get; set; }
+
+        public Stream AddStream(Stream stream)
+        {
+            Streams.Add(stream);
+            return stream;
+        }
+
+        public Stream FindStudentStream(StudentWithTimeTable student)
+        {
+            return Streams.FirstOrDefault(stream => stream.ContainsStudent(student));
+        }
+
         public List<Stream> GetStreams()
         {
             return Streams;
