@@ -23,7 +23,7 @@ namespace IsuExtra.Entities
                 {
                     try
                     {
-                        int int32 = Convert.ToInt32(groupName[i]);
+                        int someNumber = Convert.ToInt32(groupName[i]);
                     }
                     catch (FormatException)
                     {
