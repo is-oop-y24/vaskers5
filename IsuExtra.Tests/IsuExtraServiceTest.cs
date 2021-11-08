@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -50,15 +51,15 @@ namespace IsuExtra.Tests
             var audition2 = new Audition(347);
             var audition3 = new Audition(348);
 
-            var kiberbez1 = new Lesson("Кибербез", 1, 2, povyish, audition1, itip);
-            var kiberbez2 = new Lesson("Кибербез", 1, 3, povyish, audition1, itip);
-            var informationCulture1 = new Lesson("ЦК", 2, 3, povyish, audition1, itip);
-            var informationCulture2 = new Lesson("ЦК", 2, 4, povyish, audition1, itip);
-            var informationCulture3 = new Lesson("ЦК", 7, 4, povyish, audition1, bit);
-            var matan1 = new Lesson("Матан", 3, 2, suslina, audition1, bit);
-            var matan2 = new Lesson("Матан", 4, 3, suslina, audition2, bit);
-            var matan3 = new Lesson("Матан", 5, 3, suslina, audition3, bit);
-            var matan4 = new Lesson("Матан", 6, 4, suslina, audition1, bit);
+            var kiberbez1 = new Lesson("Кибербез", DayOfWeek.Monday, LessonNumberStruct.SecondLesson, povyish, audition1, itip);
+            var kiberbez2 = new Lesson("Кибербез", DayOfWeek.Monday, LessonNumberStruct.ThirdLesson, povyish, audition1, itip);
+            var informationCulture1 = new Lesson("ЦК", DayOfWeek.Thursday, LessonNumberStruct.ThirdLesson, povyish, audition1, itip);
+            var informationCulture2 = new Lesson("ЦК", DayOfWeek.Thursday, LessonNumberStruct.FourthLesson, povyish, audition1, itip);
+            var informationCulture3 = new Lesson("ЦК", DayOfWeek.Saturday, LessonNumberStruct.FourthLesson, povyish, audition1, bit);
+            var matan1 = new Lesson("Матан", DayOfWeek.Wednesday, LessonNumberStruct.SecondLesson, suslina, audition1, bit);
+            var matan2 = new Lesson("Матан", DayOfWeek.Thursday, LessonNumberStruct.ThirdLesson, suslina, audition2, bit);
+            var matan3 = new Lesson("Матан", DayOfWeek.Friday, LessonNumberStruct.ThirdLesson, suslina, audition3, bit);
+            var matan4 = new Lesson("Матан", DayOfWeek.Sunday, LessonNumberStruct.FourthLesson, suslina, audition1, bit);
             
             var timeTable1 = new List<Lesson> {matan2, informationCulture1};
             var timeTable2 = new List<Lesson> {kiberbez1, matan1};
