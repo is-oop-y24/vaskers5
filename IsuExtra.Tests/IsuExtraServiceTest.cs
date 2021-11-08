@@ -18,12 +18,12 @@ namespace IsuExtra.Tests
         {
             var m3105 = new Group("M3105");
             var m3104 = new Group("M3104");
-            var Vasiliy = new Student( 311495,"Vasiliy", m3104);
+            var vasiliy = new Student( 311495,"vasiliy", m3104);
             var petya = new Student( 311496,"Petya", m3104);
-            var m3104_students = new List<Student>() { Vasiliy, petya };
+            var studentsM3104 = new List<Student>() { vasiliy, petya };
             var firstStudent = new Student( 311497,"firstStudent", m3105);
             var SecondStudent = new Student( 311498,"SecondStudent", m3105);
-            var m3105_students = new List<Student>() { firstStudent, SecondStudent };
+            var studentsM3105 = new List<Student>() { firstStudent, SecondStudent };
             var groups1 = new List<Group>() { m3104, m3105 };
             var is1 = new Course(1, groups1);
             
@@ -31,10 +31,10 @@ namespace IsuExtra.Tests
             var m3204 = new Group("M3204");
             var vasya2228 = new Student( 312495,"vasya2228", m3204);
             var petya2 = new Student( 312496,"Petya",m3204);
-            var m3204_students = new List<Student>() { vasya2228, petya2 }; ;
+            var studentsM3204 = new List<Student>() { vasya2228, petya2 }; ;
             var rofl11 = new Student( 312497, "rofl11", m3205);
             var rofl22 = new Student( 312498, "rofl22", m3205);
-            var m3205_students = new List<Student>() { rofl11, rofl22 };
+            var studentsM3205 = new List<Student>() { rofl11, rofl22 };
             var groups2 = new List<Group>() { m3204, m3205 };
             var is2 = new Course(2, groups2);
             var courses = new List<Course>() { is1, is2 };
@@ -82,7 +82,7 @@ namespace IsuExtra.Tests
             var isuservice = new IsuExtraService( new List<EducationCourse> {course1, course2}, courses);
 
             foreach (var students in new List<List<Student>>
-                {m3104_students, m3105_students, m3204_students, m3205_students, bit_students})
+                {studentsM3104, studentsM3105, studentsM3204, studentsM3205, bit_students})
             {
                 foreach (var student in students)
                 {
