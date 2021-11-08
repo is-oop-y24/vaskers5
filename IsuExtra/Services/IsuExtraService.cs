@@ -99,8 +99,9 @@ namespace IsuExtra.Services
 
         private List<Stream> CheckGroupTimeTable(Group group, EducationCourse course)
         {
-            var streams = course.GetStreams().Where(stream => stream.IntersectTimeTables(GroupsTimeTable[GetIndexOfGroup(group)].TimeTable)).ToList();
-            return streams;
+            return course.GetStreams()
+                .Where(stream => stream.IntersectTimeTables(GroupsTimeTable[GetIndexOfGroup(group)].TimeTable))
+                .ToList();
         }
 
         private bool CheckCourseFaculty(Group group, MegaFaculty faculty)
