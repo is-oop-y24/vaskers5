@@ -6,9 +6,7 @@ namespace IsuExtra.Entities
 {
     public class Lesson
     {
-        private int _dayNumber;
-        private int _lessonNumber;
-        public Lesson(string lessonName, int dayNumber, int lessonNumber, Teacher teacher, Audition audition, MegaFaculty lessonFaculty)
+        public Lesson(string lessonName, DayOfWeek dayNumber, LessonNumberStruct lessonNumber, Teacher teacher, Audition audition, MegaFaculty lessonFaculty)
         {
             LessonName = lessonName;
             DayNumber = dayNumber;
@@ -19,27 +17,9 @@ namespace IsuExtra.Entities
         }
 
         public string LessonName { get; set; }
-        public int DayNumber
-        {
-            get => _dayNumber;
-            set
-            {
-                if (value is < 1 or > 7)
-                    throw new InvalidDayException("Day must be in 1..7 range");
-                _dayNumber = value;
-            }
-        }
+        public DayOfWeek DayNumber { get; set; }
 
-        public int LessonNumber
-        {
-            get => _lessonNumber;
-            set
-            {
-                if (value is < 1 or > 9)
-                    throw new InvalidDayException("Day must be in 1..8 range");
-                _lessonNumber = value;
-            }
-        }
+        public LessonNumberStruct LessonNumber { get; set; }
 
         public Teacher LessonTeacher { get; set; }
         public Audition LessonAudition { get; set; }
