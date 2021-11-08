@@ -9,6 +9,6 @@ namespace IsuExtra.Entities
         FifthLesson,
         SixthLesson,
         SeventhLesson,
-        EighthLesson
+        EighthLesson,
     }
 }
