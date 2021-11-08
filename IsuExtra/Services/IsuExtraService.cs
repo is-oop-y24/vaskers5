@@ -82,12 +82,12 @@ namespace IsuExtra.Services
         public List<Student> GetUnsignedStudents(ExtraGroup group)
         {
             return group.StudentsList.Where(student =>
-                StudentsTimeTable[GetIndexOfStudent(student)].OgnpSubjects.Count < 2).ToList();
+                GetStudentWithTimeTable(student).OgnpSubjects.Count < 2).ToList();
         }
 
-        public StudentWithTimeTable GetStudentWithTimeTable(Student student)
+        public StudentWithTimeTable GetStudentWithTimeTable(Student sampleStudent)
         {
-            return StudentsTimeTable[GetIndexOfStudent(student)];
+            return StudentsTimeTable.FirstOrDefault(student => student.Id == sampleStudent.Id);
         }
 
         private ExtraGroup AddGroupWithTimeTable(ExtraGroup group)
@@ -99,7 +99,7 @@ namespace IsuExtra.Services
         private List<Stream> CheckGroupTimeTable(Group group, EducationCourse course)
         {
             return course.GetStreams()
-                .Where(stream => stream.IntersectTimeTables(GroupsTimeTable[GetIndexOfGroup(group)].TimeTable))
+                .Where(stream => stream.IntersectTimeTables(GetExtraGroupByGroup(group).TimeTable))
                 .ToList();
         }
 
@@ -110,26 +110,9 @@ namespace IsuExtra.Services
             return char.ToLower(facSymbol) != char.ToLower(groupFac);
         }
 
-        private int GetIndexOfStudent(Student sampleStudent)
+        private ExtraGroup GetExtraGroupByGroup(Group sampleGroup)
         {
-            for (int index = 0; index < StudentsTimeTable.Count; index++)
-            {
-                if (StudentsTimeTable[index].Id == sampleStudent.Id)
-                    return index;
-            }
-
-            return -1;
-        }
-
-        private int GetIndexOfGroup(Group sampleGroup)
-        {
-            for (int index = 0; index < StudentsTimeTable.Count; index++)
-            {
-                if (GroupsTimeTable[index].GroupName == sampleGroup.GroupName)
-                    return index;
-            }
-
-            return -1;
+            return GroupsTimeTable.FirstOrDefault(group => group.GroupName == sampleGroup.GroupName);
         }
     }
 }
