@@ -73,10 +73,9 @@ namespace IsuExtra.Services
         {
             var extraGroup = new ExtraGroup(group.GroupName, group.StudentsList.ToList(), timeTable);
             AddGroupWithTimeTable(extraGroup);
-            var check = group.StudentsList.Select(student =>
+            var studentsWithTimeTable = group.StudentsList.Select(student =>
                 new StudentWithTimeTable(student.Id, student.Name, extraGroup));
-            StudentsTimeTable.AddRange(
-                group.StudentsList.Select(student => new StudentWithTimeTable(student.Id, student.Name, extraGroup)));
+            StudentsTimeTable.AddRange(studentsWithTimeTable);
             return extraGroup;
         }
 
