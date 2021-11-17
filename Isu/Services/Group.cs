@@ -25,9 +25,9 @@ namespace Isu.Services
         public IList<Student> StudentsList { get; }
         private List<Student> Students { get; }
 
-        public static void CheckGroupName(string groupName)
+        public virtual void CheckGroupName(string groupName)
         {
-            if (groupName.Length == 5 && groupName[0] == 'M' && groupName[1] == '3')
+            if (groupName.Length == 5 && char.IsLetter(groupName[0]) && groupName[1] == '3')
             {
                 for (int i = 2; i < 5; i++)
                 {
