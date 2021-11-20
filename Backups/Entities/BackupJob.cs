@@ -10,14 +10,13 @@ namespace Backups.Entities
     public class BackupJob
     {
         private int _lastId = 0;
-        private string _subDirectoryPath = string.Empty;
         public BackupJob(string jobPath, BackupAlgorithms algorithm, List<SystemFile> files)
         {
             JobPath = jobPath;
             Algorithm = algorithm;
-            _subDirectoryPath = jobPath + "/" + "SubDirectory";
-            Directory.CreateDirectory(_subDirectoryPath);
-            files.Select(file => file.JustFile.CopyTo(_subDirectoryPath));
+            SubDirectoryPath = jobPath + "/" + "SubDirectory";
+            Directory.CreateDirectory(SubDirectoryPath);
+            files.Select(file => file.JustFile.CopyTo(SubDirectoryPath));
             BackupFiles = files;
             RestorePoints = new List<RestorePoint>() { };
         }
@@ -30,11 +29,12 @@ namespace Backups.Entities
         public string JobPath { get; set; }
         public BackupAlgorithms Algorithm { get; set; }
         public List<RestorePoint> RestorePoints { get; set; }
+        private string SubDirectoryPath { get; }
         private List<SystemFile> BackupFiles { get; set; }
 
         public virtual RestorePoint CreateNewRestorePoint()
         {
-            string restorePointPath = JobPath + "_" + _lastId++;
+            string restorePointPath = JobPath + "/RestorePoint_" + _lastId++;
             Directory.CreateDirectory(restorePointPath);
             RestorePoint restorePoint;
             switch (Algorithm)
@@ -44,7 +44,7 @@ namespace Backups.Entities
                     restorePoint = new RestorePoint(_lastId, restorePointPath,  archives);
                     break;
                 case BackupAlgorithms.Single:
-                    ZipFile.CreateFromDirectory(_subDirectoryPath, restorePointPath);
+                    ZipFile.CreateFromDirectory(SubDirectoryPath, restorePointPath);
                     ZipArchive archive = ZipFile.Open(restorePointPath, ZipArchiveMode.Read);
                     restorePoint = new RestorePoint(_lastId, restorePointPath, archive);
                     break;
@@ -66,7 +66,7 @@ namespace Backups.Entities
 
         public string FindFilePathInJob(SystemFile file)
         {
-            return Directory.GetFiles(_subDirectoryPath).FirstOrDefault(filePath => filePath == file.JustFile.Name);
+            return Directory.GetFiles(SubDirectoryPath).FirstOrDefault(filePath => filePath == file.JustFile.Name);
         }
 
         public SystemFile RemoveFileFromJob(SystemFile file)
@@ -82,7 +82,7 @@ namespace Backups.Entities
         public SystemFile AddFileToJob(SystemFile file)
         {
             BackupFiles.Add(file);
-            file.JustFile.CopyTo(_subDirectoryPath);
+            file.JustFile.CopyTo(SubDirectoryPath + "/" + file.JustFile.Name);
             return file;
         }
 
