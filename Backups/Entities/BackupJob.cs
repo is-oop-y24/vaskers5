@@ -40,12 +40,18 @@ namespace Backups.Entities
             switch (Algorithm)
             {
                 case BackupAlgorithms.Split:
-                    var archives = BackupFiles.Select(file => ZipFile.Open(restorePointPath, ZipArchiveMode.Create).CreateEntryFromFile(file.JustFile.FullName, file.JustFile.Name).Archive).ToList();
+                    var archives = (from file in BackupFiles
+                        let archPath = restorePointPath + "/" + file.JustFile.Name + ".zip"
+                        select ZipFile.Open(archPath, ZipArchiveMode.Create)
+                            .CreateEntryFromFile(file.JustFile.FullName, archPath)
+                            .Archive).ToList();
+
                     restorePoint = new RestorePoint(_lastId, restorePointPath,  archives);
                     break;
                 case BackupAlgorithms.Single:
-                    ZipFile.CreateFromDirectory(SubDirectoryPath, restorePointPath);
-                    ZipArchive archive = ZipFile.Open(restorePointPath, ZipArchiveMode.Read);
+                    string zipArchivePath = restorePointPath + "/" + _lastId + ".zip";
+                    ZipFile.CreateFromDirectory(SubDirectoryPath, zipArchivePath);
+                    ZipArchive archive = ZipFile.Open(zipArchivePath, ZipArchiveMode.Read);
                     restorePoint = new RestorePoint(_lastId, restorePointPath, archive);
                     break;
                 default:
