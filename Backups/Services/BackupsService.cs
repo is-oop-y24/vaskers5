@@ -14,10 +14,9 @@ namespace Backups.Services
 
         public List<BackupJob> BackupJobs { get; set; }
 
-        public BackupJob AddNewJob(string jobPath, BackupAlgorithms algorithm)
+        public BackupJob AddNewJob(string jobPath, BackupAlgorithms algorithm, bool isVirtual)
         {
-            Directory.CreateDirectory(jobPath);
-            var job = new BackupJob(jobPath, algorithm);
+            var job = new BackupJob(jobPath, algorithm, isVirtual);
             BackupJobs.Add(job);
             return job;
         }
