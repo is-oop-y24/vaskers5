@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Banks.Entities;
 using Banks.Entities.BankAccount;
 using Banks.Tools;
-
-namespace Banks.Entities
+namespace Banks.Services
 {
     public class SimpleBank
     {
@@ -41,7 +41,7 @@ namespace Banks.Entities
         public BankCommission BankCommission { get; }
         public BankLimit CreditLimit { get; }
         public BankLimit BankAccountLimit { get; }
-        public int DepositAccountDuration { get; }
+        public int DepositAccountDuration { get; set; }
         private List<Client> BankClients { get; }
         private List<DebitAccount> BankDebitAccounts { get; }
         private List<DepositAccount> BankDepositAccounts { get; }
@@ -96,7 +96,7 @@ namespace Banks.Entities
 
         public void ChangeDepositAccountDuration(int value)
         {
-            BankAccountLimit.LimitValue = value;
+            DepositAccountDuration = value;
             SendNotificationsForClients($"Now we have {value} limit for your fishy accounts!");
         }
 
