@@ -21,11 +21,11 @@ namespace Banks.Entities.BankAccount
 
         public override Transaction GetMoneyFromAccount(float money)
         {
-            if (Money < 0 && Money > -Limit.LimitValue)
+            if (Money < 0 && Money - money > -Limit.LimitValue)
             {
                 return base.AddMoneyToAccount(money - (Commission.CommissionValue * money));
             }
-            else if (Money <= -Limit.LimitValue)
+            else if (Money - money <= -Limit.LimitValue)
             {
                 throw new LimitException("You have reached your credit limit");
             }
