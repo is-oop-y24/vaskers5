@@ -20,6 +20,7 @@ namespace Banks.Entities.BankAccount
             Limit = limit;
             CreationTime = DateTime.Now;
             TransactionHistory = new List<Transaction>() { };
+            BalanceInterestPerMonth = 0;
         }
 
         public int Id { get; }
@@ -31,6 +32,8 @@ namespace Banks.Entities.BankAccount
         public BankCommission Commission { get; set; }
         public BankLimit Limit { get; set; }
         public List<Transaction> TransactionHistory { get; set; }
+
+        public float BalanceInterestPerMonth { get; set; }
 
         public virtual Transaction AddMoneyToAccount(float money)
         {
