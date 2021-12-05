@@ -12,10 +12,12 @@ namespace Banks.Entities.BankAccount
             BalanceInterest accountBalanceInterest,
             BankCommission commission,
             BankLimit limit,
-            DateTime durationEnd)
+            DateTime durationEnd,
+            float startMoney)
             : base(id, bankClient, accountBalanceInterest, commission, limit)
         {
             DurationEnd = durationEnd;
+            Money = startMoney;
         }
 
         public DateTime DurationEnd { get; }
