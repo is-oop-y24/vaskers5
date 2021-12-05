@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Banks.Entities;
 
 namespace Banks.Services
@@ -34,6 +35,23 @@ namespace Banks.Services
                 depositAccountDuration);
             SystemBanks.Add(bank);
             return bank;
+        }
+
+        public void RunTimeMachine(int dayNumber)
+        {
+            for (int i = 0; i < dayNumber; i++)
+            {
+                foreach (SimpleBank bank in SystemBanks) bank.AddAccountInterests();
+                if (i % 30 != 0) continue;
+                {
+                    foreach (SimpleBank bank in SystemBanks) bank.AddAccountInterestOnAccount();
+                }
+            }
+        }
+
+        public SimpleBank FindBankByName(string bankName)
+        {
+            return SystemBanks.FirstOrDefault(bank => bank.BankName == bankName);
         }
     }
 }
