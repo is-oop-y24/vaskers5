@@ -21,6 +21,7 @@ namespace Banks.Services
             int depositAccountDuration)
         {
             Id = id;
+            _lastAccountId = id;
             BankName = bankName;
             BankBalanceInterest = bankBalanceInterest;
             BankDepositBalanceInterest = bankDepositBalanceInterest;
@@ -29,9 +30,7 @@ namespace Banks.Services
             CreditLimit = creditLimit;
             DepositAccountDuration = depositAccountDuration;
             BankClients = new List<Client>();
-            BankDebitAccounts = new List<DebitAccount>();
-            BankDepositAccounts = new List<DepositAccount>();
-            BankCreditAccounts = new List<CreditAccount>();
+            Accounts = new List<BaseBankAccount>();
         }
 
         public int Id { get; }
@@ -43,9 +42,7 @@ namespace Banks.Services
         public BankLimit BankAccountLimit { get; }
         public int DepositAccountDuration { get; set; }
         private List<Client> BankClients { get; }
-        private List<DebitAccount> BankDebitAccounts { get; }
-        private List<DepositAccount> BankDepositAccounts { get; }
-        private List<CreditAccount> BankCreditAccounts { get; }
+        private List<BaseBankAccount> Accounts { get; }
 
         public void TransferMoney(int firstAccountId, int secondAccountId, float value)
         {
@@ -110,40 +107,47 @@ namespace Banks.Services
         public DebitAccount AddDebitAccountForClient(Client client)
         {
             var clientAccount = new DebitAccount(_lastAccountId++, client, BankBalanceInterest, BankCommission, BankAccountLimit);
-            BankDebitAccounts.Add(clientAccount);
+            Accounts.Add(clientAccount);
             return clientAccount;
         }
 
-        public DepositAccount AddDepositAccountForClient(Client client)
+        public DepositAccount AddDepositAccountForClient(Client client, float startMoney)
         {
-            var clientAccount = new DepositAccount(_lastAccountId++, client, BankBalanceInterest, BankCommission, BankAccountLimit, DateTime.Now.AddMonths(DepositAccountDuration));
-            BankDepositAccounts.Add(clientAccount);
+            var clientAccount = new DepositAccount(_lastAccountId++, client, BankDepositBalanceInterest, BankCommission, BankAccountLimit, DateTime.Now.AddMonths(DepositAccountDuration), startMoney);
+            Accounts.Add(clientAccount);
             return clientAccount;
         }
 
         public CreditAccount AddCreditAccountForClient(Client client)
         {
-            var clientAccount = new CreditAccount(_lastAccountId++, client, BankBalanceInterest, BankCommission, BankAccountLimit);
-            BankCreditAccounts.Add(clientAccount);
+            var clientAccount = new CreditAccount(_lastAccountId++, client, new BalanceInterest(0), BankCommission, BankAccountLimit);
+            Accounts.Add(clientAccount);
             return clientAccount;
         }
 
-        private dynamic FindAccountById(int accountId)
+        public void AddAccountInterests()
         {
-            var debitAccount = BankDebitAccounts.FirstOrDefault(account => account.Id == accountId);
-            var depositAccount = BankDepositAccounts.FirstOrDefault(account => account.Id == accountId);
-            var creditAccount = BankCreditAccounts.FirstOrDefault(account => account.Id == accountId);
-            if (debitAccount != null)
+            foreach (BaseBankAccount account in Accounts)
             {
-                return debitAccount;
+                account.BalanceInterestPerMonth += account.Money * account.AccountBalanceInterest.InterestValue;
             }
-            else if (depositAccount != null)
+        }
+
+        public void AddAccountInterestOnAccount()
+        {
+            foreach (BaseBankAccount account in Accounts)
             {
-                return depositAccount;
+                account.Money += account.BalanceInterestPerMonth;
+                account.BalanceInterestPerMonth = 0;
             }
-            else if (creditAccount != null)
+        }
+
+        private BaseBankAccount FindAccountById(int accountId)
+        {
+            BaseBankAccount account = Accounts.FirstOrDefault(account => account.Id == accountId);
+            if (account != null)
             {
-                return creditAccount;
+                return account;
             }
             else
             {
