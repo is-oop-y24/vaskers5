@@ -35,6 +35,11 @@ namespace Banks.Entities.BankAccount
 
         public float BalanceInterestPerMonth { get; set; }
 
+        public void ClearTransactionHistory()
+        {
+            TransactionHistory.Clear();
+        }
+
         public virtual Transaction AddMoneyToAccount(float money)
         {
             var transaction = new Transaction(_lastTransactionId++, Money, Money + money);
