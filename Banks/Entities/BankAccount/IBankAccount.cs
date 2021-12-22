@@ -4,8 +4,8 @@ namespace Banks.Entities.BankAccount
 {
     public interface IBankAccount
     {
-        public Transaction AddMoneyToAccount(float money);
+        Transaction AddMoneyToAccount(float money);
 
-        public Transaction GetMoneyFromAccount(float money);
+        Transaction GetMoneyFromAccount(float money);
     }
 }
