@@ -6,6 +6,7 @@ namespace Banks.Services
 {
     public class CentralBank
     {
+        private const int BankLimit = 0;
         private int _lastBankId = 0;
 
         public CentralBank()
@@ -13,7 +14,7 @@ namespace Banks.Services
             SystemBanks = new List<SimpleBank>();
         }
 
-        private List<SimpleBank> SystemBanks { get; set; }
+        public List<SimpleBank> SystemBanks { get; set; }
 
         public SimpleBank CreateBank(
             string bankName,
@@ -42,7 +43,7 @@ namespace Banks.Services
             for (int i = 0; i < dayNumber; i++)
             {
                 foreach (SimpleBank bank in SystemBanks) bank.AddAccountInterests();
-                if (i % 30 != 0) continue;
+                if (i % BankLimit != 0) continue;
                 {
                     foreach (SimpleBank bank in SystemBanks) bank.AddAccountInterestOnAccount();
                 }
