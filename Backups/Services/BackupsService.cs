@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Backups.Entities;
+using Backups.Entities.Algorithms;
+using Backups.Entities.ISaver;
 
 namespace Backups.Services
 {
@@ -14,9 +16,9 @@ namespace Backups.Services
 
         public List<BackupJob> BackupJobs { get; set; }
 
-        public BackupJob AddNewJob(string jobPath, BackupAlgorithms algorithm, bool isVirtual)
+        public BackupJob AddNewJob(string jobPath, IAlgorithm algorithm, ISaver saver)
         {
-            var job = new BackupJob(jobPath, algorithm, isVirtual);
+            var job = new BackupJob(jobPath, algorithm, saver);
             BackupJobs.Add(job);
             return job;
         }
@@ -28,9 +30,9 @@ namespace Backups.Services
             return job;
         }
 
-        public SystemFile AddFileToJob(BackupJob job, string filePath)
+        public FileInfo AddFileToJob(BackupJob job, string filePath)
         {
-            var file = new SystemFile(filePath, DateTime.Now);
+            var file = new FileInfo(filePath);
             job.AddFileToJob(file);
             return file;
         }
