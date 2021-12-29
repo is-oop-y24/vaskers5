@@ -73,32 +73,32 @@ namespace Backups.Tests
         }
 
 
-        [Test]
-        public void Check_SingleFileCreation_LocalTest()
-        {
-            string testDirectoryPath = @"C:\Users\danil\RiderProjects\vaskers5\Backups\TestDirectory";
-            var job1 = _backupsService.AddNewJob(testDirectoryPath + "/job-1", _algoSingle, new LocalSaver());
-        
-            _backupsService.AddFileToJob(job1, testDirectoryPath + @"\a.txt");
-            _backupsService.AddFileToJob(job1, testDirectoryPath + @"\b.txt");
-            _backupsService.AddFileToJob(job1, testDirectoryPath + @"\c.txt");
-            job1.CreateNewRestorePoint();
-            Assert.AreEqual(job1.RestorePoints.Count, 1);
-            Assert.AreEqual(job1.RestorePoints[0].Archives.Count, 1);
-        }
-        
-        [Test]
-        public void Check_SplitFileCreation_LocalTest()
-        {
-            string testDirectoryPath = @"C:\Users\danil\RiderProjects\vaskers5\Backups\TestDirectory";
-            var job1 = _backupsService.AddNewJob(testDirectoryPath + "/job-2", _algoSplit, new LocalSaver());
-        
-            _backupsService.AddFileToJob(job1, testDirectoryPath + @"\a.txt");
-            _backupsService.AddFileToJob(job1, testDirectoryPath + @"\b.txt");
-            _backupsService.AddFileToJob(job1, testDirectoryPath + @"\c.txt");
-            job1.CreateNewRestorePoint();
-            Assert.AreEqual(job1.RestorePoints.Count, 1);
-            Assert.AreEqual(job1.RestorePoints[0].Archives.Count, 3);
-        }
+        // [Test]
+        // public void Check_SingleFileCreation_LocalTest()
+        // {
+        //     string testDirectoryPath = @"C:\Users\danil\RiderProjects\vaskers5\Backups\TestDirectory";
+        //     var job1 = _backupsService.AddNewJob(testDirectoryPath + "/job-1", _algoSingle, new LocalSaver());
+        //
+        //     _backupsService.AddFileToJob(job1, testDirectoryPath + @"\a.txt");
+        //     _backupsService.AddFileToJob(job1, testDirectoryPath + @"\b.txt");
+        //     _backupsService.AddFileToJob(job1, testDirectoryPath + @"\c.txt");
+        //     job1.CreateNewRestorePoint();
+        //     Assert.AreEqual(job1.RestorePoints.Count, 1);
+        //     Assert.AreEqual(job1.RestorePoints[0].Archives.Count, 1);
+        // }
+        //
+        // [Test]
+        // public void Check_SplitFileCreation_LocalTest()
+        // {
+        //     string testDirectoryPath = @"C:\Users\danil\RiderProjects\vaskers5\Backups\TestDirectory";
+        //     var job1 = _backupsService.AddNewJob(testDirectoryPath + "/job-2", _algoSplit, new LocalSaver());
+        //
+        //     _backupsService.AddFileToJob(job1, testDirectoryPath + @"\a.txt");
+        //     _backupsService.AddFileToJob(job1, testDirectoryPath + @"\b.txt");
+        //     _backupsService.AddFileToJob(job1, testDirectoryPath + @"\c.txt");
+        //     job1.CreateNewRestorePoint();
+        //     Assert.AreEqual(job1.RestorePoints.Count, 1);
+        //     Assert.AreEqual(job1.RestorePoints[0].Archives.Count, 3);
+        // }
     }
 }
