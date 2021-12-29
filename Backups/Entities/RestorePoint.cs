@@ -6,24 +6,19 @@ namespace Backups.Entities
 {
     public class RestorePoint
     {
-        public RestorePoint(int id, string restorePointPath, List<ZipArchive> archives)
+        public RestorePoint(int id, string restorePointPath)
         {
-            Id = id;
+            RestorePointId = id;
             RestorePointPath = restorePointPath;
-            Archives = archives;
+            Archives = new List<Repository>();
             CreationTime = DateTime.Now;
         }
 
-        public RestorePoint(int id, string restorePointPath, ZipArchive archive)
-            : this(id, restorePointPath, new List<ZipArchive>() { archive })
-        {
-        }
+        public virtual DateTime CreationTime { get; }
 
-        public virtual DateTime CreationTime { get; set; }
+        public virtual List<Repository> Archives { get;  }
 
-        public virtual List<ZipArchive> Archives { get; set; }
-
-        public virtual int Id { get; set; }
+        public virtual int RestorePointId { get; }
         public string RestorePointPath { get; }
     }
 }
