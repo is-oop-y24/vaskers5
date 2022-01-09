@@ -12,7 +12,7 @@ using BackupsExtra.Entities.RestorePointsJob;
 using BackupsExtra.Services;
 using BackupsExtra.Tools;
 using NUnit.Framework;
-using Single = Backups.Entities.Algorithms.Single;
+using Backups.Entities.Algorithms;
 
 namespace BackupsExtra.Tests
 {
@@ -34,13 +34,13 @@ namespace BackupsExtra.Tests
         {
             _backupsService = new BackupExtraService();
             _algoSplit = new Split();
-            _algoSingle = new Single();
+            _algoSingle = new SingleAlgo();
             _virtualSaver = new VirtualSaver();
             _deleteJob = new DeleteJob();
             _mergeJob = new MergeJob();
             _dateClear = new ClearByDateAlgorithm(DateTime.Now);
             _countClear = new ClearByNumberAlgorithm(3);
-            _gibridClear = new GibridAlgorithm(3, DateTime.Now);
+            _gibridClear = new GibridAlgorithm(new List<IClearAlgorithm>(){_dateClear, _countClear});
         }
 
         [Test]

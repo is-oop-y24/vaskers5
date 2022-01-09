@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Backups.Entities.Algorithms;
 
-public class Single : IAlgorithm
+public class SingleAlgo : IAlgorithm
 {
     public void MakeBackup(RestorePoint point, List<FileInfo> jobFiles, ISaver.ISaver saver)
     {
