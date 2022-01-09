@@ -7,21 +7,16 @@ namespace BackupsExtra.Entities.RestorePointsCleaningAlgorithms
 {
     public class GibridAlgorithm : IClearAlgorithm
     {
-        public GibridAlgorithm(int countLimit, DateTime dateLimit)
+        public GibridAlgorithm(List<IClearAlgorithm> algorithms)
         {
-            CountLimit = countLimit;
-            DateLimit = dateLimit;
+            Algorithms = new List<IClearAlgorithm>();
         }
 
-        public int CountLimit { get; set; }
-
-        public DateTime DateLimit { get; }
+        public List<IClearAlgorithm> Algorithms { get; }
 
         public List<RestorePoint> MakeClear(List<RestorePoint> points)
         {
-            List<RestorePoint> validPoints = points.Count > CountLimit ? points.Take(points.Count - CountLimit).ToList() : new List<RestorePoint>();
-            validPoints = validPoints.Where(point => point.CreationTime < DateLimit).ToList();
-            return validPoints;
+            return Algorithms.Aggregate(points, (current, algo) => algo.MakeClear(current));
         }
     }
 }
