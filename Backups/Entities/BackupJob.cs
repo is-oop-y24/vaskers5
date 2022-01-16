@@ -46,20 +46,11 @@ namespace Backups.Entities
             Directory.Delete(point.RestorePointPath);
         }
 
-        public string FindFilePathInJob(FileInfo file)
-        {
-            return Directory.GetFiles(SubDirectoryPath).FirstOrDefault(filePath => filePath == file.Name);
-        }
-
         public FileInfo RemoveFileFromJob(FileInfo file)
         {
-            BackupFiles.Remove(file);
-
-            var jobFile = new FileInfo(FindFilePathInJob(file));
-            if (jobFile is null)
+            if (!BackupFiles.Contains(file))
                 throw new FileNotExistException("This file is not exist at current job");
-            jobFile.Delete();
-
+            BackupFiles.Remove(file);
             return file;
         }
 

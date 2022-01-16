@@ -20,7 +20,7 @@ namespace Backups.Tests
         {
             _backupsService = new BackupsService();
             _algoSplit = new Split();
-            _algoSingle = new Single();
+            _algoSingle = new SingleAlgo();
             _virtualSaver = new VirtualSaver();
         }
 
